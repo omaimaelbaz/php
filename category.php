@@ -257,7 +257,9 @@ if(isset($_GET["id_category"])){
                                     <form method="post" class="form-horizontal">
                                         <div class="row form-group">
                                             <div class="col col-md-3"><label for="hf-email" class=" form-control-label"> category name </label></div>
-                                            <div class="col-12 col-md-9"><input type="text" id="hf-email" name="category"  placeholder="Entrer votre category ..."  class="form-control"></div>
+                                            <div class="col-12 col-md-9">
+                                                <input type="text" id="hf-email" name="category"  placeholder="Entrer votre category ..."  class="form-control">
+                                            </div>
                                         </div>
                                       
                                         <button type="submit" name='addcategory' class="btn btn-primary btn-sm">
@@ -300,7 +302,7 @@ if(isset($_GET["id_category"])){
                                                     <a href="#"><i class="fa fa-glass"></i></a>
                                                 </div>
                                                 <div class="fa-hover col-lg-3 col-md-6">
-                                             <a href="category.php?CategoryID=<?php echo $row["CategoryID"]?>">S</a>
+                                             <a href="category.php?id_category=<?php echo $row["CategoryID"]?>">S</a>
                                                 </div>
                                             </td>
                                 

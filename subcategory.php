@@ -13,8 +13,8 @@ if(isset($_POST["updatsub"])){
     $conn->query($sql);
 }
 //suprimer
-if(isset($_GET["id_sub"])){
-    $id = $_GET["id_sub"];
+if(isset($_GET["SubcategoryID"])){
+    $id = $_GET["SubcategoryID"];
     $sql = "DELETE FROM Subcategory WHERE SubcategoryID = $id";
     $conn->query($sql);
 }

@@ -1,3 +1,27 @@
+<?php
+require_once "connect.php";
+if(isset($_POST["addResource"])){
+    $resource = $_POST["resource"];
+    $categ_id = $_POST["categ_id"];
+    $sql = "INSERT INTO ressource (ResourceName,CategoryID)  VALUES ('$resource','$categ_id')";
+    $conn->query($sql);
+}
+// upadate 
+if(isset($_POST["UpdateResource"])){
+    $id = $_POST["id_rec"];
+    $resource = $_POST["resource"];
+    $categ_id = $_POST["categ_id"];
+    
+    $sql = "UPDATE `ressource` SET `ResourceName`='$resource',`CategoryID`='$categ_id' WHERE ResourceID = $id";
+    $conn->query($sql);
+}
+//suprimer
+if(isset($_GET["id_category"])){
+    $id = $_GET["id_category"];
+    $sql = "DELETE FROM Category WHERE CategoryID = $id";
+    $conn->query($sql);
+}
+?>
 <!doctype html>
 
 <html lang="en">
@@ -30,6 +54,7 @@
 <body>
     <!-- Left Panel -->
 
+   
     <aside id="left-panel" class="left-panel">
         <nav class="navbar navbar-expand-sm navbar-default">
 
@@ -50,16 +75,17 @@
                     <li class="active">
                         <a href="users.php"> <i class="menu-icon fa fa-dashboard"></i>Users </a>
                     </li>  
-                    <li class="active">
-                        <a href="resource.php"> <i class="menu-icon fa fa-dashboard"></i>Resources</a>
-                    </li> 
+                   
                     <li class="active">
                         <a href="Category.php"> <i class="menu-icon fa fa-dashboard"></i>Category</a>
                     </li>    
                     <li class="active">
-
                         <a href="Subcategory.php"> <i class="menu-icon fa fa-dashboard"></i> Subcategory</a>
-                    </li>    
+                    </li>  
+                      
+                    <li class="active">
+                        <a href="resource.php"> <i class="menu-icon fa fa-dashboard"></i>Resources</a>
+                    </li> 
                     
 
                 </ul>
@@ -199,7 +225,7 @@
 
         </header><!-- /header -->
         <!-- Header-->
-
+<!--  modal ajouter  -->
         <div class="breadcrumbs">
             <div class="col-sm-4">
                 <div class="page-header float-left">
@@ -214,7 +240,7 @@
                         <ol class="breadcrumb text-right">
                             <li><a href="#">Dashboard</a></li>
                             <li><a href="#">Table</a></li>
-                            <li class="active">User table</li>
+                            <li class="active">category table</li>
                         </ol>
                     </div>
                 </div>
@@ -228,74 +254,85 @@
             <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
-                        
                         <div class="modal-body">
                             <div class="card">
                                 <div class="card-body card-block">
-                                    
-                                    <form action="" method="post" class="form-horizontal">
+                                    <form method="post" class="form-horizontal">
                                         <div class="row form-group">
-                                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label">User name</label></div>
-                                            <div class="col-12 col-md-9"><input type="text" id="hf-email" name="hf-email"  placeholder="Entrer user name ..."  class="form-control"></div>
-                                        </div>
-                                        <div class="row form-group">
-                                            
-                                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Role</label></div>
+                                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label"> Resource name </label></div>
                                             <div class="col-12 col-md-9">
-                                                <select name="" id=""  class="form-control">
-                                                    <option value="leader">leader</option>
-                                                    <option value="mombre">mombre</option>
-                                                </select>
+                                                <input type="text" id="hf-email" name="resource"  placeholder="Entrer votre category ..."  class="form-control">
                                             </div>
                                         </div>
                                         <div class="row form-group">
-                                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label">Email</label></div>
-                                            <div class="col-12 col-md-9"><input type="email" id="hf-email" name="hf-email" placeholder="Enter Email..." class="form-control"></div>
+                                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label"> category name </label></div>
+                                            <div class="col-12 col-md-9">
+                                                <select name="categ_id" class='form-control'>
+                                                <?php
+                                                $sql = "SELECT *  FROM category";
+                                                $result = $conn->query($sql);
+                                                while($row = $result->fetch_assoc()){
+                                                ?>
+                                                <option value="<?php echo $row['CategoryID'] ?>"><?php echo $row['CategoryName'] ?></option>
+                                                <?php
+                                                }
+                                                ?>
+                                                </select>
+                                            </div>
                                         </div>
-                    
+                                        
+                                        <button type="submit" name='addResource' class="btn btn-primary btn-sm">
+                                            <i class="fa fa-dot-circle-o"></i> add category
+                                        </button>
                                     </form>
-                                </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="fa fa-dot-circle-o"></i> Submit
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+<!-- Afichage des ro=esource  -->
             <div class="animated fadeIn">
                 <div class="row">
                     <div class="col">
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">utilisateur Table</strong>
+                                <strong class="card-title">category Table</strong>
                             </div>
                             <div class="card-body">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">UserID </th>
-                                            <th scope="col">Nom d'utilisateur</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Role</th>
-                                            
+                                            <th scope="col">ResourceID </th>
+                                            <th scope="col">Resource Name</th> 
+                                            <th scope="col">Category ID</th> 
                                             <th>action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <?php
+                                        $sql = "SELECT * FROM ressource";
+                                        $result = $conn->query($sql);
+                                        while($row = $result->fetch_assoc()){
+                                        ?>
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            <td>leader</td>
-                                            <td><div data-toggle="modal" data-target="#update" class="fa-hover col-lg-3 col-md-6"><a href="#"><i class="fa fa-glass"></i></a></div></td>
-                                            
+                                            <th scope="row"><?php echo $row["ResourceID"] ?></th>
+                                            <td><?php echo $row["ResourceName"] ?></td>
+                                            <td><?php echo $row["CategoryID"] ?></td>
+
+                                            <td>
+                                                <div data-toggle="modal" data-target="#update<?php echo $row["ResourceID"] ?>" class="fa-hover col-lg-3 col-md-6">
+                                                    <a href="#"><i class="fa fa-glass"></i></a>
+                                                </div>
+                                                <div class="fa-hover col-lg-3 col-md-6">
+                                             <a href="category.php?id_category=<?php echo $row['ResourceID']?>">S</a>
+                                                </div>
+                                            </td>
+                                
                                         </tr>
-                                        
+                                        <?php
+                                            }
+                                        ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -308,31 +345,52 @@
 
 
     </div><!-- /#right-panel -->
-    <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
+    <?php
+    $sql2 = "SELECT * FROM ressource";
+    $result2 = $conn->query($sql2);
+    while($row2 = $result2->fetch_assoc()){
+    ?>
+    <!-- modal upadate -->
+    <div class="modal fade" id="update<?php echo $row2["ResourceID"] ?>" tabindex="-1" role="dialog" aria-labelledby="largeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 
                 <div class="modal-body">
-                    <div class="card">
-                        <div class="card-header">
-                            <strong>Horizontal</strong> Form
+                    <form method="post" class="form-horizontal">
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label"> Resource name </label></div>
+                            <div class="col-12 col-md-9">
+                                <input type="text" id="hf-email" value='<?php echo $row2["ResourceName"] ?>' name="resource"  placeholder="Entrer votre category ..."  class="form-control">
+                            </div>
                         </div>
-                        <div class="card-body card-block">
-                            
+                        <div class="row form-group">
+                            <div class="col col-md-3"><label for="hf-email" class=" form-control-label"> category name </label></div>
+                            <div class="col-12 col-md-9">
+                                <select name="categ_id" class='form-control'>
+                                <?php
+                                $sql = "SELECT *  FROM category";
+                                $result = $conn->query($sql);
+                                while($row = $result->fetch_assoc()){
+                                ?>
+                                <option value="<?php echo $row['CategoryID'] ?>"><?php echo $row['CategoryName'] ?></option>
+                                <?php
+                                }
+                                ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fa fa-dot-circle-o"></i> Submit
-                            </button>
-                            <button type="reset" class="btn btn-danger btn-sm">
-                                <i class="fa fa-ban"></i> Reset
-                            </button>
-                        </div>
-                    </div>
+                        <input type="hidden" value='<?php echo $row2['ResourceID'] ?>' name='id_rec'>
+                        <button type="submit" name='UpdateResource' class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> add category
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+    <?php
+    }
+    ?>
     <!-- Right Panel -->
 
 
@@ -345,3 +403,4 @@
 </body>
 
 </html>
+ 
